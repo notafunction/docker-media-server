@@ -1,0 +1,66 @@
+version: "3.7"
+
+services:
+  transmission:
+    container_name: transmission
+    image: haugene/transmission-openvpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    restart: always
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    volumes:
+      - ${PWD}/config/transmission:/data/transmission-home
+      - ${TORRENT_DIR}:/data
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - traefik_proxy
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - NORDVPN_COUNTRY=${NORDVPN_COUNTRY}
+      - NORDVPN_CATEGORY=legacy_p2p
+      - NORDVPN_PROTOCOL=tcp
+      - OPENVPN_PROVIDER=${OPENVPN_PROVIDER}
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=${TRANSMISSION_RPC_AUTHENTICATION_REQUIRED}
+      - TRANSMISSION_RPC_USERNAME=${TRANSMISSION_RPC_USERNAME}
+      - TRANSMISSION_RPC_PASSWORD=${TRANSMISSION_RPC_PASSWORD}
+      - TRANSMISSION_UMASK=2
+      - TRANSMISSION_RATIO_LIMIT=1.00
+      - TRANSMISSION_RATIO_LIMIT_ENABLED=true
+      - TRANSMISSION_IDLE_SEEDING_LIMIT=5
+      - TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED=true
+
+  transmission-proxy:
+    container_name: transmission-proxy
+    image: haugene/transmission-openvpn-proxy
+    links:
+      - transmission
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=transmission"
+      - "traefik.frontend.rule=Host:transmission.${DOMAIN_NAME}"
+      - "traefik.port=8080"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.frontend.headers.SSLRedirect=true"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.SSLHost=${DOMAIN_NAME}"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=false"
+    
+
+networks:
+  traefik_proxy:
+    external: true
