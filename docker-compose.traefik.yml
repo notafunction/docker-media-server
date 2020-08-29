@@ -13,9 +13,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ${PWD}/config/traefik/traefik.toml:/traefik.toml:ro
       - ${PWD}/config/traefik/acme.json:/acme.json
-   environment:
-     - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
-     - CF_API_KEY=${CLOUDFLARE_API_KEY}
+  #  environment:
+  #    - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
+  #    - CF_API_KEY=${CLOUDFLARE_API_KEY}
     ports:
       - "80:80"
       - "443:443"
