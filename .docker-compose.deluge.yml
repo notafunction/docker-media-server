@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+#  deluge:
+#    container_name: deluge
+#    build: https://github.com/sscraggles/docker-deluge-openvpn.git
+#    cap_add:
+#      - NET_ADMIN
+#    devices:
+#      - /dev/net/tun
+#    restart: always
+#    networks:
+#      - traefik_proxy
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - ${DOCKER_DIR}/deluge/data:/data
+#      - ${DOCKER_DIR}/deluge/config:/config
+#    environment:
+#      - OPENVPN_PROVIDER=NORDVPN
+#      #- OPENVPN_CONFIG=
+#      - WEBPROXY_ENABLED=false
+#      - LOCAL_NETWORK=192.168.1.0/24,172.26.0.0/24
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.backend=deluge"
+#      - "traefik.frontend.rule=Host:deluge.${DOMAIN_NAME}"
+#      - "traefik.port=9091"
+        # - "traefik.docker.network=traefik_proxy"
+#      - "traefik.frontend.headers.SSLRedirect=true"
+#      - "traefik.frontend.headers.STSSeconds=315360000"
+#      - "traefik.frontend.headers.browserXSSFilter=true"
+#      - "traefik.frontend.headers.contentTypeNosniff=true"
+#      - "traefik.frontend.headers.forceSTSHeader=true"
+#      - "traefik.frontend.headers.SSLHost=${DOMAIN_NAME}"
+#      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+#      - "traefik.frontend.headers.STSPreload=true"
+#      - "traefik.frontend.headers.frameDeny=false"
+
+networks:
+  host:
+  traefik_proxy:
+    external: true
+  default:
+    driver: bridge
