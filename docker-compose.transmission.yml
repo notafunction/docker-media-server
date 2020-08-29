@@ -47,19 +47,20 @@ services:
       - traefik_proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.backend=transmission"
-      - "traefik.frontend.rule=Host:transmission.${DOMAIN_NAME}"
-      - "traefik.port=8080"
       - "traefik.docker.network=traefik_proxy"
-      - "traefik.frontend.headers.SSLRedirect=true"
-      - "traefik.frontend.headers.STSSeconds=315360000"
-      - "traefik.frontend.headers.browserXSSFilter=true"
-      - "traefik.frontend.headers.contentTypeNosniff=true"
-      - "traefik.frontend.headers.forceSTSHeader=true"
-      - "traefik.frontend.headers.SSLHost=${DOMAIN_NAME}"
-      - "traefik.frontend.headers.STSIncludeSubdomains=true"
-      - "traefik.frontend.headers.STSPreload=true"
-      - "traefik.frontend.headers.frameDeny=false"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
+
+      # - "traefik.port=8080"
+      # - "traefik.frontend.headers.SSLRedirect=true"
+      # - "traefik.frontend.headers.STSSeconds=315360000"
+      # - "traefik.frontend.headers.browserXSSFilter=true"
+      # - "traefik.frontend.headers.contentTypeNosniff=true"
+      # - "traefik.frontend.headers.forceSTSHeader=true"
+      # - "traefik.frontend.headers.SSLHost=${DOMAIN_NAME}"
+      # - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      # - "traefik.frontend.headers.STSPreload=true"
+      # - "traefik.frontend.headers.frameDeny=false"
     
 
 networks:
