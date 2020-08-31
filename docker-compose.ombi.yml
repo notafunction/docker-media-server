@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  ombi:
+    container_name: ombi
+    image: linuxserver/ombi
+    restart: unless-stopped
+    volumes:
+      - ${PWD}/config/ombi:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    networks:
+      - traefik_proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.http.routers.ombi.rule=Host(`ombi.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.ombi.middlewares=securityHeaders@file"
+      - "traefik.http.routers.ombi.tls.certresolver=letsencrypt"
+      # - "traefik.port=3579"
+
+networks:
+  traefik_proxy:
+    external: true
