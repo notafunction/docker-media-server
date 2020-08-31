@@ -9,7 +9,7 @@ services:
       - ${TORRENT_DIR}:/downloads
       - ${MEDIA_DIR}:/media
       - /etc/localtime:/etc/localtime:ro
-    restart: always
+    restart: unless-stopped
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

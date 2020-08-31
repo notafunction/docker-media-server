@@ -8,7 +8,7 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun
-    restart: always
+    restart: unless-stopped
     dns:
       - 1.1.1.1
       - 1.0.0.1
@@ -42,7 +42,7 @@ services:
   transmission-proxy:
     container_name: transmission-proxy
     image: haugene/transmission-openvpn-proxy
-    restart: always
+    restart: unless-stopped
     links:
       - transmission
     networks:

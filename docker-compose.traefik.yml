@@ -5,7 +5,7 @@ services:
     hostname: traefik
     image: traefik
     container_name: traefik
-    restart: always
+    restart: unless-stopped
     domainname: ${DOMAIN_NAME}
     networks:
       - traefik_proxy
