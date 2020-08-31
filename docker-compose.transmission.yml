@@ -36,6 +36,8 @@ services:
       - TRANSMISSION_RATIO_LIMIT_ENABLED=true
       - TRANSMISSION_IDLE_SEEDING_LIMIT=5
       - TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED=true
+      - TRANSMISSION_PORT_FORWARDING_ENABLED=true
+      - TRANSMISSION_UTP_ENABLED=true
 
   transmission-proxy:
     container_name: transmission-proxy
@@ -50,17 +52,8 @@ services:
       - "traefik.docker.network=traefik_proxy"
       - "traefik.http.routers.transmission.rule=Host(`transmission.${DOMAIN_NAME}`)"
       - "traefik.http.routers.transmission.tls.certresolver=letsencrypt"
-
-      # - "traefik.port=8080"
-      # - "traefik.frontend.headers.SSLRedirect=true"
-      # - "traefik.frontend.headers.STSSeconds=315360000"
-      # - "traefik.frontend.headers.browserXSSFilter=true"
-      # - "traefik.frontend.headers.contentTypeNosniff=true"
-      # - "traefik.frontend.headers.forceSTSHeader=true"
-      # - "traefik.frontend.headers.SSLHost=${DOMAIN_NAME}"
-      # - "traefik.frontend.headers.STSIncludeSubdomains=true"
-      # - "traefik.frontend.headers.STSPreload=true"
-      # - "traefik.frontend.headers.frameDeny=false"
+      - "traefik.http.routers.transmission.middlewares=auth@file, securityHeaders@file"
+      - "traefik.http.services.transmission.loadbalancer.server.port=8080"
     
 
 networks:

@@ -20,21 +20,9 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_proxy"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.sonarr.middlewares=auth@file, securityHeaders@file"
       - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
-      
-      # - "traefik.frontend.headers.SSLRedirect=true"
-      # - "traefik.frontend.headers.STSSeconds=315360000"
-      # - "traefik.frontend.headers.browserXSSFilter=true"
-      # - "traefik.frontend.headers.contentTypeNosniff=true"
-      # - "traefik.frontend.headers.forceSTSHeader=true"
-      # - "traefik.frontend.headers.SSLHost=${DOMAIN_NAME}"
-      # - "traefik.frontend.headers.STSIncludeSubdomains=true"
-      # - "traefik.frontend.headers.STSPreload=true"
-      # - "traefik.frontend.headers.frameDeny=false"
 
 networks:
-  host:
   traefik_proxy:
     external: true
-  default:
-    driver: bridge

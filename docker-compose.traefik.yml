@@ -11,8 +11,7 @@ services:
       - traefik_proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${PWD}/config/traefik/traefik.yml:/traefik.yml:ro
-      - ${PWD}/config/traefik/acme-v2.json:/acme.json
+      - ${PWD}/config/traefik:/etc/traefik:ro
   #  environment:
   #    - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
   #    - CF_API_KEY=${CLOUDFLARE_API_KEY}
@@ -22,26 +21,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_proxy"
-      - "traefik.http.routers.traefik-api.entryPoints=websecure"
       - "traefik.http.routers.traefik-api.rule=Host(`traefik.${DOMAIN_NAME}`)"
-      - "traefik.http.routers.traefik-api.service=api@internal"
-      - "traefik.http.routers.traefik-api.middlewares.auth=auth@file"
       - "traefik.http.routers.traefik-api.tls.certresolver=letsencrypt"
-      
-      # - "traefik.frontend.headers.SSLRedirect=true"
-      # - "traefik.frontend.headers.STSSeconds=315360000"
-      # - "traefik.frontend.headers.browserXSSFilter=true"
-      # - "traefik.frontend.headers.contentTypeNosniff=true"
-      # - "traefik.frontend.headers.forceSTSHeader=true"
-      # - "traefik.frontend.headers.SSLHost=${DOMAIN_NAME}"
-      # - "traefik.frontend.headers.STSIncludeSubdomains=true"
-      # - "traefik.frontend.headers.STSPreload=true"
-      # - "traefik.frontend.headers.frameDeny=false"
-      # - "traefik.frontend.auth.basic.users=${HTTP_AUTH_USERNAME}:${HTTP_AUTH_PASSWORD}"
+      - "traefik.http.routers.traefik-api.service=api@internal"
+      - "traefik.http.routers.traefik-api.middlewares=auth@file, securityHeaders@file"
 
 networks:
-  host:
   traefik_proxy:
     external: true
-  default:
-    driver: bridge
